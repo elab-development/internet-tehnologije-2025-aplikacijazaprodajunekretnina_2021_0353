@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "crm_user",
+    "password": "crm_password",
+    "database": "real_estate_crm",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "crm_user",
+    "password": "crm_password",
+    "database": "real_estate_crm_test",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "crm_user",
+    "password": "crm_password",
+    "database": "real_estate_crm_prod",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  }
+}
