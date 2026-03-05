@@ -8,13 +8,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const authRoutes = require('./routes/authRoutes');
-const propertyRoutes = require('./routes/propertyRoutes');
-const clientRoutes = require('./routes/clientRoutes');
 
 // Rute
 app.use('/api/auth', authRoutes);
-app.use('/api/properties', propertyRoutes);
-app.use('/api/clients', clientRoutes);
 
 // Health Check rutua
 app.get('/api/health', (req, res) => {
