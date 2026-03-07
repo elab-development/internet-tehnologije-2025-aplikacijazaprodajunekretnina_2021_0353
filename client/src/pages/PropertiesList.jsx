@@ -63,11 +63,17 @@ const PropertiesList = () => {
                     </div>
                     <div>
                         <h2 className="text-xl font-semibold mb-4">Pregled</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {properties.map(property => (
-                                <PropertyCard key={property.id} property={property} />
-                            ))}
-                        </div>
+                        {properties.length === 0 ? (
+                            <div className="text-gray-500 italic py-8 text-center bg-gray-50 rounded-lg border border-gray-200">
+                                Trenutno nema dostupnih nekretnina.
+                            </div>
+                        ) : (
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {properties.map(property => (
+                                    <PropertyCard key={property.id} property={property} />
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </div>
             )}
