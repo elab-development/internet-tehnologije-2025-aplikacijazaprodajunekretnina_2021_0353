@@ -29,4 +29,9 @@ export const getProperties = async () => {
     return response.data;
 };
 
+export const getDashboardStats = async () => {
+    const response = await api.get('/stats');
+    return response.data;
+};
+
 export default api;

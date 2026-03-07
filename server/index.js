@@ -14,12 +14,14 @@ const authRoutes = require('./routes/authRoutes');
 const propertyRoutes = require('./routes/propertyRoutes');
 const clientRoutes = require('./routes/clientRoutes');
 const externalApiRoutes = require('./routes/externalApiRoutes');
+const statsRoutes = require('./routes/statsRoutes');
 
 // Rute
 app.use('/api/auth', authRoutes);
 app.use('/api/properties', propertyRoutes);
 app.use('/api/clients', clientRoutes);
 app.use('/api/external', externalApiRoutes);
+app.use('/api/stats', statsRoutes);
 
 // Health Check rutua
 app.get('/api/health', (req, res) => {
