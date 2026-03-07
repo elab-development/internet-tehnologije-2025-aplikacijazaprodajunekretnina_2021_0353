@@ -16,9 +16,17 @@ const PropertiesList = () => {
                 setLoading(false);
             } catch (err) {
                 console.error("Greška pri dohvatanju nekretnina:", err);
+
+                // Ako je greška 401 ili 403, ne prikazujemo demo podatke već izbacujemo grešku
+                if (err.response && (err.response.status === 401 || err.response.status === 403)) {
+                    setError("Nemate ovlašćenje za pregled ovih podataka. Molimo prijavite se ponovo.");
+                    setLoading(false);
+                    return;
+                }
+
                 setError("Nije moguće učitati podatke sa servera. Prikazujem demo podatke.");
 
-                // Fallback demo data
+                // Fallback demo data (samo za mrežne greške ili pad baze)
                 const dummyData = [
                     {
                         id: 1,
@@ -28,7 +36,8 @@ const PropertiesList = () => {
                         status: "available",
                         address: "Knez Mihailova 1",
                         city: "Beograd",
-                        imageUrl: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+                        // Korišćenje direktnog linka koji sigurno radi
+                        imageUrl: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80"
                     },
                     {
                         id: 2,
@@ -38,7 +47,7 @@ const PropertiesList = () => {
                         status: "sold",
                         address: "Zemunska 12",
                         city: "Zemun",
-                        imageUrl: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+                        imageUrl: "https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?auto=format&fit=crop&w=800&q=80"
                     }
                 ];
                 setProperties(dummyData);

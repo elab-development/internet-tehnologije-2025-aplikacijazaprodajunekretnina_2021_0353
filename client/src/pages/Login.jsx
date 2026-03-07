@@ -21,7 +21,9 @@ const Login = () => {
         try {
             const data = await login(formData);
             console.log('Login uspešan:', data);
-            navigate('/dashboard'); // Preusmeravanje nakon logina
+            localStorage.setItem('user', JSON.stringify(data.user));
+            navigate('/dashboard');
+            window.location.reload(); // Da bi Navbar video promenu odmah
         } catch (err) {
             console.error('Greška pri logovanju:', err);
             setError('Pogrešan e-mail ili lozinka. Ili server nije dostupan.');

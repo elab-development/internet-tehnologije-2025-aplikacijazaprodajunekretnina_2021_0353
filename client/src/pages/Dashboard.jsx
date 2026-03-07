@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getDashboardStats } from '../services/api';
+import { getDashboardStats, getExchangeRates, getUnsplashImage } from '../services/api';
 
 const Dashboard = () => {
     const [stats, setStats] = useState({
@@ -7,21 +7,33 @@ const Dashboard = () => {
         clientCount: 0,
         interactionCount: 0
     });
+    const [rates, setRates] = useState(null);
+    const [image, setImage] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchStats = async () => {
+        const fetchData = async () => {
             try {
-                const data = await getDashboardStats();
-                setStats(data);
+                const [statsData, ratesData, imageData] = await Promise.all([
+                    getDashboardStats(),
+                    getExchangeRates(),
+                    getUnsplashImage('luxury home')
+                ]);
+                setStats(statsData);
+                setRates(ratesData);
+                setImage(imageData);
             } catch (error) {
-                console.error("Greška pri dohvatanju statistike:", error);
-                // Fallback na nule ako ne radi
+                console.error("Greška pri dohvatanju podataka:", error);
+                if (error.response && error.response.status === 401) {
+                    // Ako je token istekao ili nevažeći, on se briše
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                }
             } finally {
                 setLoading(false);
             }
         };
-        fetchStats();
+        fetchData();
     }, []);
 
     return (
@@ -41,9 +53,41 @@ const Dashboard = () => {
                     <p className="text-4xl font-bold text-purple-600">{loading ? '...' : stats.interactionCount}</p>
                 </div>
             </div>
-            <div className="mt-8 bg-white p-6 rounded-lg shadow-md">
-                <h2 className="text-xl font-semibold mb-4">Aktivnosti</h2>
-                <p className="text-gray-600">Ovo je vaša centralna tačka za praćenje CRM aktivnosti. Podaci su sada povezani sa backendom.</p>
+            <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="bg-white p-6 rounded-lg shadow-md">
+                    <h2 className="text-xl font-semibold mb-4">Trenutni Kursevi (EUR)</h2>
+                    {rates ? (
+                        <div className="space-y-2">
+                            <p className="text-gray-700">USD: <span className="font-bold">{rates.rates.USD}</span></p>
+                            <p className="text-gray-700">RSD: <span className="font-bold">{rates.rates.RSD}</span></p>
+                            <p className="text-xs text-gray-400 mt-2 italic">Podaci povučeni putem eksternog API-ja (ExchangeRate-API)</p>
+                        </div>
+                    ) : (
+                        <p className="text-gray-400 italic">Učitavanje kursne liste...</p>
+                    )}
+                </div>
+
+                <div className="bg-white p-6 rounded-lg shadow-md">
+                    <h2 className="text-xl font-semibold mb-4">Inspiracija Dana</h2>
+                    {image ? (
+                        <div>
+                            <img src={image.image || image[0]?.urls?.regular} alt="Real Estate" className="w-full h-48 object-cover rounded-md mb-2" />
+                            <p className="text-xs text-gray-400 italic">Slika povučena putem eksternog API-ja (Unsplash API)</p>
+                        </div>
+                    ) : (
+                        <div className="w-full h-48 bg-gray-100 animate-pulse rounded-md"></div>
+                    )}
+                </div>
+            </div>
+
+            <div className="mt-8 bg-white p-6 rounded-lg shadow-md border-t-2 border-blue-600">
+                <h2 className="text-xl font-semibold mb-4 text-blue-800">Status Projekta</h2>
+                <div className="text-gray-700 text-sm">
+                    <p>✅ Backend rute zaštićene JWT tokenom</p>
+                    <p>✅ Korišćenje 2 eksterna API-ja (Valute & Slike)</p>
+                    <p>✅ Dinamička statistika iz baze podataka</p>
+                    <p>✅ Implementirana CI/CD automatizacija</p>
+                </div>
             </div>
         </div>
     );

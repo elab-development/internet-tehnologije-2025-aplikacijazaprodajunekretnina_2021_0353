@@ -9,9 +9,10 @@ const {
 } = require('../controllers/propertyController');
 
 // SKROZ ISKLJUČENO PRIVREMENO:
-// const { authenticateToken, authorizeRoles } = require('../middlewares/authMiddleware');
+const { authenticateToken, authorizeRoles } = require('../middlewares/authMiddleware');
 
-// router.use(authenticateToken);
+router.use(authenticateToken);
+// Admin vidi sve, agent vidi svoje (logika je u kontroleru)
 // router.use(authorizeRoles('admin', 'agent'));
 
 router.get('/', getAllProperties);
