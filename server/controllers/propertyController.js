@@ -4,11 +4,11 @@ const { Property, User } = require('../models');
 const getAllProperties = async (req, res) => {
     try {
         let whereClause = {};
-        // Ako je korisnik agent, vidi samo svoje nekretnine
-        if (req.user.role === 'agent') {
+        // Ako je korisnik ulogovan i agent, vidi samo svoje nekretnine
+        if (req.user && req.user.role === 'agent') {
             whereClause.userId = req.user.id;
         }
-        // Admin vidi sve
+        // Admin i neulogovani korisnici vide sve (neulogovani jer je middleware isključen)
 
         const properties = await Property.findAll({
             where: whereClause,
@@ -30,7 +30,7 @@ const getPropertyById = async (req, res) => {
         if (!property) return res.status(404).json({ error: 'Nekretnina nije našena' });
 
         // Odbrana od IDOR (Agent može videti samo svoju nekretninu)
-        if (req.user.role === 'agent' && property.userId !== req.user.id) {
+        if (req.user && req.user.role === 'agent' && property.userId !== req.user.id) {
             return res.status(403).json({ error: 'Nemate pravo pristupa ovoj nekretnini' });
         }
 

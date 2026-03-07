@@ -7,10 +7,12 @@ const {
     updateProperty,
     deleteProperty
 } = require('../controllers/propertyController');
-const { authenticateToken, authorizeRoles } = require('../middlewares/authMiddleware');
 
-router.use(authenticateToken); // Sve rute zahtevaju login
-router.use(authorizeRoles('admin', 'agent')); // Samo admin i agent mogu pristupiti
+// SKROZ ISKLJUČENO PRIVREMENO:
+// const { authenticateToken, authorizeRoles } = require('../middlewares/authMiddleware');
+
+// router.use(authenticateToken);
+// router.use(authorizeRoles('admin', 'agent'));
 
 router.get('/', getAllProperties);
 router.get('/:id', getPropertyById);
