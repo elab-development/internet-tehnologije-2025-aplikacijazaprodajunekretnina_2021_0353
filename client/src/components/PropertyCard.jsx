@@ -18,7 +18,7 @@ const PropertyCard = ({ property }) => {
                     <span className="text-sm bg-gray-100 px-2 py-1 rounded">{property.status}</span>
                 </div>
                 <div className="mt-2 text-sm text-gray-500">
-                    📍 {property.address}, {property.city}
+                    📍 {property.location || (property.address ? `${property.address}, ${property.city}` : 'Nepoznata lokacija')}
                 </div>
             </div>
         </div>

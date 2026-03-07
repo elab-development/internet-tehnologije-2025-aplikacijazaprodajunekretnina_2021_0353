@@ -29,4 +29,19 @@ export const getProperties = async () => {
     return response.data;
 };
 
+export const getDashboardStats = async () => {
+    const response = await api.get('/stats');
+    return response.data;
+};
+
+export const getExchangeRates = async () => {
+    const response = await api.get('/external/rates');
+    return response.data;
+};
+
+export const getUnsplashImage = async (query) => {
+    const response = await api.get(`/external/unsplash?query=${query || 'house'}`);
+    return response.data;
+};
+
 export default api;
