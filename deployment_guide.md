@@ -2,6 +2,23 @@
 
 Ovaj vodič će vam pomoći da postavite svoju aplikaciju na Vercel platformu. Pošto aplikacija ima i Frontend (React) i Backend (Node.js), najlakši način je da ih povežete preko GitHub-a.
 
+## Opcija 2: Render.com Deployment (Preporučeno)
+
+Ova opcija je najlakša jer sam kreirao `render.yaml` fajl koji sve radi automatski.
+
+### Koraci:
+1. Prijavite se na [Render.com](https://render.com/).
+2. Kliknite na dugme **New +** i izaberite **Blueprint**.
+3. Povežite vaš GitHub repozitorijum.
+4. Render će pročitati `render.yaml` i ponuditi vam da kreira:
+   - **crm-db** (PostgreSQL baza)
+   - **crm-api** (Backend server)
+   - **crm-frontend** (Frontend sajt)
+5. Kliknite na **Apply**.
+6. Sačekajte par minuta da se sve instalira.
+
+**Napomena**: Render će automatski povezati bazu sa serverom i server sa frontendom. Nema ručnog kucanja lozinki! ✨
+
 ## 1. Priprema Baze Podataka
 Vercel ne podržava Docker za bazu, pa vam je potrebna "Cloud" baza.
 - Preporučujem [Neon.tech](https://neon.tech/) ili **Vercel Postgres**.
