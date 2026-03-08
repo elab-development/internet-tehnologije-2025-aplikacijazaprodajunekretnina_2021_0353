@@ -23,6 +23,11 @@ app.use('/api/clients', clientRoutes);
 app.use('/api/external', externalApiRoutes);
 app.use('/api/stats', statsRoutes);
 
+// Root ruta
+app.get('/', (req, res) => {
+  res.send('CRM Real Estate API is running...');
+});
+
 // Health Check rutua
 app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'OK', message: 'API is running' });

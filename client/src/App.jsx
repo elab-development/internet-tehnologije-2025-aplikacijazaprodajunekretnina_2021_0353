@@ -3,6 +3,9 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import PropertiesList from './pages/PropertiesList';
+import PropertyDetails from './pages/PropertyDetails';
+import AddProperty from './pages/AddProperty';
+import EditProperty from './pages/EditProperty';
 import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -29,6 +32,30 @@ function App() {
               element={
                 <ProtectedRoute>
                   <PropertiesList />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/properties/add"
+              element={
+                <ProtectedRoute>
+                  <AddProperty />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/properties/edit/:id"
+              element={
+                <ProtectedRoute>
+                  <EditProperty />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/properties/:id"
+              element={
+                <ProtectedRoute>
+                  <PropertyDetails />
                 </ProtectedRoute>
               }
             />

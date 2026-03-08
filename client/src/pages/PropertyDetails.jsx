@@ -48,20 +48,52 @@ const PropertyDetails = () => {
 
                 <div className="p-8">
                     <div className="flex justify-between items-start mb-4">
-                        <h1 className="text-4xl font-bold text-gray-800">{property.title}</h1>
-                        <span className="text-3xl font-bold text-blue-600">
-                            {property.price.toLocaleString()} €
-                        </span>
-                    </div>
+                        <div className="flex-1">
+                            <h1 className="text-4xl font-bold text-gray-800 mb-2">{property.title}</h1>
+                            <div className="flex gap-4">
+                                <span className={`px-3 py-1 rounded-full text-sm font-semibold ${property.status === 'available' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                                    }`}>
+                                    {property.status === 'available' ? 'SLOBODNO' : 'PRODATO'}
+                                </span>
+                                <span className="text-gray-500 flex items-center gap-1">
+                                    📍 {property.location}
+                                </span>
+                            </div>
+                        </div>
+                        <div className="text-right flex flex-col items-end gap-3">
+                            <span className="text-3xl font-bold text-blue-600 whitespace-nowrap">
+                                {property.price.toLocaleString()} €
+                            </span>
 
-                    <div className="flex gap-4 mb-6">
-                        <span className={`px-3 py-1 rounded-full text-sm font-semibold ${property.status === 'available' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                            }`}>
-                            {property.status === 'available' ? 'SLOBODNO' : 'PRODATO'}
-                        </span>
-                        <span className="text-gray-500 flex items-center gap-1">
-                            📍 {property.location}
-                        </span>
+                            {/* Management Buttons */}
+                            {(JSON.parse(localStorage.getItem('user') || '{}').role === 'admin' ||
+                                (JSON.parse(localStorage.getItem('user') || '{}').role === 'agent' && property.userId === JSON.parse(localStorage.getItem('user') || '{}').id)) && (
+                                    <div className="flex gap-2">
+                                        <button
+                                            onClick={() => navigate(`/properties/edit/${id}`)}
+                                            className="bg-amber-100 text-amber-700 hover:bg-amber-200 px-4 py-2 rounded-lg font-semibold transition-colors"
+                                        >
+                                            Izmeni
+                                        </button>
+                                        <button
+                                            onClick={async () => {
+                                                if (window.confirm('Da li ste sigurni da želite da obrišete ovu nekretninu?')) {
+                                                    try {
+                                                        const { deleteProperty } = await import('../services/api');
+                                                        await deleteProperty(id);
+                                                        navigate('/properties');
+                                                    } catch (err) {
+                                                        alert('Greška pri brisanju!');
+                                                    }
+                                                }
+                                            }}
+                                            className="bg-red-100 text-red-700 hover:bg-red-200 px-4 py-2 rounded-lg font-semibold transition-colors"
+                                        >
+                                            Obriši
+                                        </button>
+                                    </div>
+                                )}
+                        </div>
                     </div>
 
                     <div className="border-t border-b py-6 mb-6">

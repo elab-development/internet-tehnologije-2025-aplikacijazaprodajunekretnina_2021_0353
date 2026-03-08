@@ -45,12 +45,14 @@ const getPropertyById = async (req, res) => {
 // CREATE property
 const createProperty = async (req, res) => {
     try {
-        const { title, description, price, location } = req.body;
+        const { title, description, price, location, status, imageUrl } = req.body;
         const newProperty = await Property.create({
             title,
             description,
             price,
             location,
+            status: status || 'available',
+            imageUrl,
             userId: req.user.id // Vežemo za trenutnog ulogovanog agenta/admina
         });
         res.status(201).json(newProperty);
@@ -66,13 +68,17 @@ const updateProperty = async (req, res) => {
         const property = await Property.findByPk(req.params.id);
         if (!property) return res.status(404).json({ error: 'Nekretnina nije našena' });
 
-        // Odbrana od IDOR (samo admin ili vlasnik mogu da menjaju)
+        // Admin može sve, agent samo svoje, klijent ništa (iako middleware blokira klijenta, ovo je dupla zaštita)
+        if (req.user.role === 'klijent') {
+            return res.status(403).json({ error: 'Klijenti ne mogu editovati nekretnine' });
+        }
+
         if (req.user.role === 'agent' && property.userId !== req.user.id) {
             return res.status(403).json({ error: 'Nemate pravo izmene ove nekretnine' });
         }
 
-        const { title, description, price, location } = req.body;
-        await property.update({ title, description, price, location });
+        const { title, description, price, location, status } = req.body;
+        await property.update({ title, description, price, location, status });
 
         res.status(200).json(property);
     } catch (error) {
@@ -87,7 +93,10 @@ const deleteProperty = async (req, res) => {
         const property = await Property.findByPk(req.params.id);
         if (!property) return res.status(404).json({ error: 'Nekretnina nije našena' });
 
-        // Odbrana od IDOR
+        if (req.user.role === 'klijent') {
+            return res.status(403).json({ error: 'Klijenti ne mogu brisati nekretnine' });
+        }
+
         if (req.user.role === 'agent' && property.userId !== req.user.id) {
             return res.status(403).json({ error: 'Nemate pravo brisanja ove nekretnine' });
         }

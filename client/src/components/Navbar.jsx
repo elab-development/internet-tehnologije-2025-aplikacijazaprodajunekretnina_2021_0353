@@ -29,6 +29,11 @@ const Navbar = () => {
                 <div className="flex items-center space-x-6">
                     <Link to="/dashboard" className="hover:text-blue-200 transition-colors">Dashboard</Link>
                     <Link to="/properties" className="hover:text-blue-200 transition-colors">Nekretnine</Link>
+                    {(user?.role === 'admin' || user?.role === 'agent') && (
+                        <Link to="/properties/add" className="bg-blue-500 hover:bg-blue-400 px-3 py-1 rounded transition-colors text-sm font-bold">
+                            + Dodaj
+                        </Link>
+                    )}
 
                     {token ? (
                         <div className="flex items-center space-x-4 border-l border-blue-500 pl-4 ml-4">

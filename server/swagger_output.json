@@ -131,6 +131,12 @@
                 },
                 "location": {
                   "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                },
+                "imageUrl": {
+                  "example": "any"
                 }
               }
             }
@@ -206,6 +212,9 @@
                   "example": "any"
                 },
                 "location": {
+                  "example": "any"
+                },
+                "status": {
                   "example": "any"
                 }
               }
@@ -422,7 +431,7 @@
         }
       }
     },
-    "/api/external/exchange-rates": {
+    "/api/external/rates": {
       "get": {
         "description": "",
         "responses": {
@@ -441,7 +450,7 @@
         }
       }
     },
-    "/api/external/unsplash-images": {
+    "/api/external/unsplash": {
       "get": {
         "description": "",
         "parameters": [
@@ -460,6 +469,19 @@
           },
           "403": {
             "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/stats/": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
           },
           "500": {
             "description": "Internal Server Error"

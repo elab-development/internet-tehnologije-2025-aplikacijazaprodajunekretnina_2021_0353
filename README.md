@@ -51,7 +51,12 @@ Aplikacija će biti dostupna na portu koji Vite dodeli (obično `http://localhos
 ## API Dokumentacija
 
 Nakon pokretanja servera, Swagger dokumentacija je dostupna na:
-`http://localhost:5000/api-docs` (ako je implementirano) ili pratite instrukcije u `server/swagger.js`.
+`http://localhost:5000/api-docs`.
+
+## Deployment (Vercel)
+
+Za detaljna uputstva o postavljanju aplikacije na Vercel i povezivanju baze podataka, pogledajte [vodič za deployment](deployment_guide.md).
+Projekt sadrži i `server/vercel.json` konfiguaciju spreman za deployment backenda.
 
 ## Testiranje
 
