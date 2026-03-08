@@ -1,11 +1,11 @@
-services:
-  # Database
-  - type: database
-    name: crm-db
+# Render Blueprint v1.1 - Fixed structure
+databases:
+  - name: crm-db
     plan: free
     databaseName: real_estate_crm
     user: crm_user
 
+services:
   # Backend (Express)
   - type: web
     name: crm-api
@@ -37,6 +37,5 @@ services:
         fromService:
           type: web
           name: crm-api
-          property: host
-        # Note: Render static sites need VITE_ vars at build time. 
-        # Blueprints handle this well.
+          property: url
+
