@@ -1,4 +1,4 @@
-import React from 'react';
+import { Link } from 'react-router-dom';
 
 const PropertyCard = ({ property }) => {
     return (
@@ -14,8 +14,13 @@ const PropertyCard = ({ property }) => {
                 <h3 className="text-xl font-semibold mb-2">{property.title}</h3>
                 <p className="text-gray-600 mb-2 truncate">{property.description}</p>
                 <div className="flex justify-between items-center mt-4">
-                    <span className="text-blue-600 font-bold">${property.price.toLocaleString()}</span>
-                    <span className="text-sm bg-gray-100 px-2 py-1 rounded">{property.status}</span>
+                    <span className="text-blue-600 font-bold">{property.price.toLocaleString()} €</span>
+                    <Link
+                        to={`/properties/${property.id}`}
+                        className="text-sm bg-blue-100 text-blue-600 px-3 py-1 rounded hover:bg-blue-200 transition-colors"
+                    >
+                        Pogledaj detalje
+                    </Link>
                 </div>
                 <div className="mt-2 text-sm text-gray-500">
                     📍 {property.location || (property.address ? `${property.address}, ${property.city}` : 'Nepoznata lokacija')}

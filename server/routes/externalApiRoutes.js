@@ -6,7 +6,7 @@ const { authenticateToken } = require('../middlewares/authMiddleware');
 // Zaštita ruta: dostupne samo ulogovanim korisnicima (svim ulogama)
 router.use(authenticateToken);
 
-router.get('/exchange-rates', getExchangeRates);
-router.get('/unsplash-images', getUnsplashImages);
+router.get('/rates', getExchangeRates);
+router.get('/unsplash', getUnsplashImages);
 
 module.exports = router;

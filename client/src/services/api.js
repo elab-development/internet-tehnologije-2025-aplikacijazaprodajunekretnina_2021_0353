@@ -29,6 +29,11 @@ export const getProperties = async () => {
     return response.data;
 };
 
+export const getPropertyById = async (id) => {
+    const response = await api.get(`/properties/${id}`);
+    return response.data;
+};
+
 export const getDashboardStats = async () => {
     const response = await api.get('/stats');
     return response.data;
