@@ -6,6 +6,9 @@ import PropertiesList from './pages/PropertiesList';
 import PropertyDetails from './pages/PropertyDetails';
 import AddProperty from './pages/AddProperty';
 import EditProperty from './pages/EditProperty';
+import ClientsList from './pages/ClientsList';
+import InteractionsList from './pages/InteractionsList';
+import UsersList from './pages/UsersList';
 import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -56,6 +59,30 @@ function App() {
               element={
                 <ProtectedRoute>
                   <PropertyDetails />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/clients"
+              element={
+                <ProtectedRoute>
+                  <ClientsList />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/interactions"
+              element={
+                <ProtectedRoute>
+                  <InteractionsList />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/users"
+              element={
+                <ProtectedRoute>
+                  <UsersList />
                 </ProtectedRoute>
               }
             />

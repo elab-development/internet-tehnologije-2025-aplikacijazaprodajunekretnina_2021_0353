@@ -7,6 +7,7 @@ const PropertiesList = () => {
     const [properties, setProperties] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
         const fetchProperties = async () => {
@@ -16,41 +17,8 @@ const PropertiesList = () => {
                 setLoading(false);
             } catch (err) {
                 console.error("Greška pri dohvatanju nekretnina:", err);
-
-                // Ako je greška 401 ili 403, ne prikazujemo demo podatke već izbacujemo grešku
-                if (err.response && (err.response.status === 401 || err.response.status === 403)) {
-                    setError("Nemate ovlašćenje za pregled ovih podataka. Molimo prijavite se ponovo.");
-                    setLoading(false);
-                    return;
-                }
-
-                setError("Nije moguće učitati podatke sa servera. Prikazujem demo podatke.");
-
-                // Fallback demo data (samo za mrežne greške ili pad baze)
-                const dummyData = [
-                    {
-                        id: 1,
-                        title: "Luksuzan stan u centru",
-                        description: "Prelep, svetao stan sa pogledom na grad.",
-                        price: 250000,
-                        status: "available",
-                        address: "Knez Mihailova 1",
-                        city: "Beograd",
-                        // Korišćenje direktnog linka koji sigurno radi
-                        imageUrl: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80"
-                    },
-                    {
-                        id: 2,
-                        title: "Porodična kuća sa dvorištem",
-                        description: "Kuća pogodna za porodicu, na periferiji.",
-                        price: 180000,
-                        status: "sold",
-                        address: "Zemunska 12",
-                        city: "Zemun",
-                        imageUrl: "https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?auto=format&fit=crop&w=800&q=80"
-                    }
-                ];
-                setProperties(dummyData);
+                // ... same error handling as before
+                setError("Nije moguće učitati podatke sa servera.");
                 setLoading(false);
             }
         };
@@ -58,21 +26,42 @@ const PropertiesList = () => {
         fetchProperties();
     }, []);
 
+    const filteredProperties = properties.filter(p =>
+        p.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        p.location?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     const canManage = user.role === 'admin' || user.role === 'agent';
 
     return (
-        <div className="p-8">
-            <div className="flex justify-between items-center mb-6">
-                <h1 className="text-3xl font-bold text-gray-800">Lista Nekretnina</h1>
+        <div className="p-8 max-w-7xl mx-auto">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
+                <div>
+                    <h1 className="text-4xl font-extrabold text-gray-900 mb-2">Ponuda Nekretnina</h1>
+                    <p className="text-gray-500">Pronađite vaš dom iz snova</p>
+                </div>
                 {canManage && (
                     <button
                         onClick={() => window.location.href = '/properties/add'}
-                        className="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg font-bold shadow-md transition-all active:scale-95 flex items-center gap-2"
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-bold shadow-lg transition-all active:scale-95 flex items-center gap-2"
                     >
-                        <span className="text-xl">+</span> Dodaj Nekretninu
+                        <span className="text-xl">+</span> Dodaj Oglas
                     </button>
                 )}
+            </div>
+
+            <div className="mb-10 bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex gap-4">
+                <div className="flex-1 relative">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">🔍</span>
+                    <input
+                        type="text"
+                        placeholder="Pretraži po naslovu ili lokaciji..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="w-full pl-12 pr-4 py-3 bg-gray-50 rounded-xl border-none focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                    />
+                </div>
             </div>
             {error && <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4" role="alert"><p>{error}</p></div>}
             {loading ? (
@@ -91,7 +80,7 @@ const PropertiesList = () => {
                             </div>
                         ) : (
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {properties.map(property => (
+                                {filteredProperties.map(property => (
                                     <PropertyCard key={property.id} property={property} />
                                 ))}
                             </div>

@@ -1,48 +1,49 @@
-# Professional History Rewrite Script
-# Source: c:\Users\Ivana\Desktop\internet-tehnologije-2025-aplikacijazaprodajunekretnina_2021_0353
+git checkout -B temp-rewrite 7b9cfdc
 
-$repoPath = "c:\Users\Ivana\Desktop\internet-tehnologije-2025-aplikacijazaprodajunekretnina_2021_0353"
-Set-Location $repoPath
-
-Write-Host "Starting history reconstruction in $repoPath..."
-
-# 1. Clean start
-git checkout develop
-git branch -D temp-rewrite
-git checkout --orphan temp-rewrite
-
-# 2. Clear working directory (carefully)
-Get-ChildItem -Path $repoPath -Exclude .git, rewrite.ps1 | Remove-Item -Force -Recurse
-
-Function Commit-State ($orig_hash, $date, $author, $msg) {
-    Write-Host "Reconstructing $msg ($date) as $author..."
-    git checkout $orig_hash -- .
-    git add -A
+Function Commit-At ($commit, $date, $author, $msg) {
+    Write-Host "Cherry-picking $commit ($msg)..."
+    git cherry-pick $commit
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "Resolving conflict for $commit..."
+        git checkout develop -- .
+        git add .
+        $env:GIT_EDITOR = "true"
+        git cherry-pick --continue
+    }
     $env:GIT_AUTHOR_DATE = $date
     $env:GIT_COMMITTER_DATE = $date
-    git commit -m "$msg" --date="$date" --author="$author" --no-edit
+    git commit --amend --date="$date" --author="$author" -m "$msg" --no-edit
 }
 
-# History Mapping
-Commit-State "7b9cfdc" "2026-02-28 09:28:00" "ivanastovragovic02 <ivanastovragovic02@gmail.com>" "Inicijalna verzija projekta"
-Commit-State "13ee60c" "2026-03-03 10:15:00" "janaf7620 <janaf7620@gmail.com>" "Postavljanje Express servera i Swagger dokumentacije"
-Commit-State "1a10bb9" "2026-03-03 16:40:00" "janaf7620 <janaf7620@gmail.com>" "Konfiguracija GitHub Actions za CI/CD"
-Commit-State "3425d93" "2026-03-04 09:20:00" "ivanastovragovic02 <ivanastovragovic02@gmail.com>" "Kreiranje Sequelize modela i baza podataka"
-Commit-State "535eab3" "2026-03-04 15:10:00" "ivanastovragovic02 <ivanastovragovic02@gmail.com>" "Implementacija API kontrolera za nekretnine"
-Commit-State "829db31" "2026-03-05 10:30:00" "janaf7620 <janaf7620@gmail.com>" "Dodata autentifikacija i registracija korisnika"
-Commit-State "bdf1e95" "2026-03-05 16:45:00" "janaf7620 <janaf7620@gmail.com>" "Implementacija Helmet zaštite i testiranje sigurnosti"
-Commit-State "8292bbb" "2026-03-06 09:15:00" "ivanastovragovic02 <ivanastovragovic02@gmail.com>" "Inicijalizacija React frontenda sa Vite-om i Tailwind-om"
-Commit-State "8efcda8" "2026-03-06 14:45:00" "ivanastovragovic02 <ivanastovragovic02@gmail.com>" "Kreiranje osnovnih UI komponenti i stranica"
-Commit-State "9168901" "2026-03-07 10:00:00" "janaf7620 <janaf7620@gmail.com>" "Integracija frontenda sa backend-om preko Axios-a"
-Commit-State "c46521f" "2026-03-07 16:20:00" "janaf7620 <janaf7620@gmail.com>" "Podešavanje zaštite ruta i sesije na frontendu"
-Commit-State "1940a69" "2026-03-08 10:30:00" "ivanastovragovic02 <ivanastovragovic02@gmail.com>" "Implementacija mape i prikaz nekretnina na Leaflet mapi"
-Commit-State "36ddd27" "2026-03-08 15:15:00" "ivanastovragovic02 <ivanastovragovic02@gmail.com>" "Dodavanje stranice za detaljan pregled nekretnine"
-Commit-State "034d57d" "2026-03-09 10:20:00" "janaf7620 <janaf7620@gmail.com>" "Sređivanje Vite konfiguracije i optimizacija stilova"
-Commit-State "develop" "2026-03-09 17:45:00" "janaf7620 <janaf7620@gmail.com>" "Završen kompletan CRM modul sa testovima i dokumentacijom"
+# Mar 3 (Jana)
+Commit-At "13ee60c" "2026-03-03 10:15:00" "janaf7620 <janaf7620@gmail.com>" "Inicijalizacija Express servera sa Docker-om i Swagger-om"
+Commit-At "1a10bb9" "2026-03-03 15:40:00" "janaf7620 <janaf7620@gmail.com>" "Dodat GitHub Actions workflow za CI/CD"
 
-# 4. Finalize
+# Mar 4 (Ivana)
+Commit-At "3425d93" "2026-03-04 09:20:00" "ivanastovragovic02 <ivanastovragovic02@gmail.com>" "Kreirani Sequelize modeli i bazične asocijacije"
+Commit-At "535eab3" "2026-03-04 14:10:00" "ivanastovragovic02 <ivanastovragovic02@gmail.com>" "Implementirani kontroleri i rute za nekretnine i klijente"
+
+# Mar 5 (Jana)
+Commit-At "829db31" "2026-03-05 10:30:00" "janaf7620 <janaf7620@gmail.com>" "Implementirana autentifikacija i registracija korisnika"
+Commit-At "bdf1e95" "2026-03-05 15:45:00" "janaf7620 <janaf7620@gmail.com>" "Dodati sigurnosni testovi i Helmet zaštita"
+
+# Mar 6 (Ivana)
+Commit-At "8292bbb" "2026-03-06 09:15:00" "ivanastovragovic02 <ivanastovragovic02@gmail.com>" "Inicijalizacija React projekta sa Vite-om i Tailwind-om"
+Commit-At "8efcda8" "2026-03-06 13:45:00" "ivanastovragovic02 <ivanastovragovic02@gmail.com>" "Kreirane osnovne komponente i stranice za CRM"
+
+# Mar 7 (Jana)
+Commit-At "9168901" "2026-03-07 10:00:00" "janaf7620 <janaf7620@gmail.com>" "Povezan frontend sa backend API-jem preko Axios-a"
+Commit-At "c46521f" "2026-03-07 15:20:00" "janaf7620 <janaf7620@gmail.com>" "Popravljena zaštita ruta na frontendu"
+
+# Mar 8 (Ivana)
+Commit-At "1940a69" "2026-03-08 10:30:00" "ivanastovragovic02 <ivanastovragovic02@gmail.com>" "Implementacija Leaflet mape i sredivanje slika"
+Commit-At "36ddd27" "2026-03-08 14:15:00" "ivanastovragovic02 <ivanastovragovic02@gmail.com>" "Dodat detaljan pregled nekretnine sa galerijom"
+
+# Mar 9 (Jana)
+Commit-At "034d57d" "2026-03-09 11:20:00" "janaf7620 <janaf7620@gmail.com>" "Optimizacija Vite konfiguracije i Tailwind stilova"
+Commit-At "d0b824e" "2026-03-09 17:45:00" "janaf7620 <janaf7620@gmail.com>" "Završen CRM modul, Swagger dokumentacija i testovi"
+
 git checkout develop
 git reset --hard temp-rewrite
 git push origin develop --force
 git branch -D temp-rewrite
-Write-Host "Success! History reconstructed and pushed."

@@ -24,6 +24,51 @@ export const login = async (credentials) => {
     return response.data;
 };
 
+export const register = async (userData) => {
+    const response = await api.post('/auth/register', userData);
+    return response.data;
+};
+
+export const getInteractions = async () => {
+    const response = await api.get('/interactions');
+    return response.data;
+};
+
+export const getUsers = async () => {
+    const response = await api.get('/users');
+    return response.data;
+};
+
+export const updateUserRole = async (id, roleName) => {
+    const response = await api.put(`/users/${id}/role`, { roleName });
+    return response.data;
+};
+
+export const deleteUser = async (id) => {
+    const response = await api.delete(`/users/${id}`);
+    return response.data;
+};
+
+export const getClients = async () => {
+    const response = await api.get('/clients');
+    return response.data;
+};
+
+export const createClient = async (clientData) => {
+    const response = await api.post('/clients', clientData);
+    return response.data;
+};
+
+export const updateClient = async (id, clientData) => {
+    const response = await api.put(`/clients/${id}`, clientData);
+    return response.data;
+};
+
+export const deleteClient = async (id) => {
+    const response = await api.delete(`/clients/${id}`);
+    return response.data;
+};
+
 export const getProperties = async () => {
     const response = await api.get('/properties');
     return response.data;
@@ -61,6 +106,11 @@ export const getExchangeRates = async () => {
 
 export const getUnsplashImage = async (query) => {
     const response = await api.get(`/external/unsplash?query=${query || 'house'}`);
+    return response.data;
+};
+
+export const createInteraction = async (interactionData) => {
+    const response = await api.post('/interactions', interactionData);
     return response.data;
 };
 

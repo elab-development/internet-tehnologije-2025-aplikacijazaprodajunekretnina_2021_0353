@@ -86,14 +86,33 @@ const PropertyForm = ({ initialData, onSubmit, onCancel, loading }) => {
                 </div>
                 <div className="col-span-2 md:col-span-1">
                     <label className="block text-sm font-medium text-gray-700 mb-1">URL Slike</label>
-                    <input
-                        type="text"
-                        name="imageUrl"
-                        value={formData.imageUrl}
-                        onChange={handleChange}
-                        className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
-                        placeholder="Link do slike sa Unsplash-a"
-                    />
+                    <div className="flex gap-2">
+                        <input
+                            type="text"
+                            name="imageUrl"
+                            value={formData.imageUrl}
+                            onChange={handleChange}
+                            className="flex-1 p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                            placeholder="Link do slike..."
+                        />
+                        <button
+                            type="button"
+                            onClick={async () => {
+                                try {
+                                    const { getUnsplashImage } = await import('../services/api');
+                                    const data = await getUnsplashImage(formData.title || 'house');
+                                    const url = data.image || data[0]?.urls?.regular;
+                                    setFormData(prev => ({ ...prev, imageUrl: url }));
+                                } catch (err) {
+                                    alert('Greška pri traženju slike');
+                                }
+                            }}
+                            className="px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 text-xs font-bold transition-colors"
+                            title="Pronađi sliku na Unsplash-u"
+                        >
+                            Pronađi sliku
+                        </button>
+                    </div>
                 </div>
                 <div className="col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-1">Opis</label>

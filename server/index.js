@@ -16,6 +16,10 @@ const propertyRoutes = require('./routes/propertyRoutes');
 const clientRoutes = require('./routes/clientRoutes');
 const externalApiRoutes = require('./routes/externalApiRoutes');
 const statsRoutes = require('./routes/statsRoutes');
+const interactionRoutes = require('./routes/interactionRoutes');
+const userRoutes = require('./routes/userRoutes');
+const swaggerUi = require('swagger-ui-express');
+const swaggerJsdoc = require('swagger-jsdoc');
 
 // Rute
 app.use('/api/auth', authRoutes);
@@ -23,6 +27,29 @@ app.use('/api/properties', propertyRoutes);
 app.use('/api/clients', clientRoutes);
 app.use('/api/external', externalApiRoutes);
 app.use('/api/stats', statsRoutes);
+app.use('/api/interactions', interactionRoutes);
+app.use('/api/users', userRoutes);
+
+// Swagger konfiguracija
+const swaggerOptions = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Real Estate CRM API',
+      version: '1.0.0',
+      description: 'API specifikacija za sistem prodaje nekretnina',
+    },
+    servers: [
+      {
+        url: 'http://localhost:5000',
+      },
+    ],
+  },
+  apis: ['./routes/*.js'], // Putanja do fajlova sa rurama
+};
+
+const swaggerDocs = swaggerJsdoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Root ruta
 app.get('/', (req, res) => {

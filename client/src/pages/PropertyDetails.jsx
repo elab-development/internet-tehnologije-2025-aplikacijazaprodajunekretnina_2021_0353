@@ -103,9 +103,9 @@ const PropertyDetails = () => {
                         </p>
                     </div>
 
-                    <div className="bg-gray-50 p-6 rounded-lg">
+                    <div className="bg-gray-50 p-6 rounded-lg mb-6">
                         <h2 className="text-xl font-semibold mb-4">Kontakt Agent</h2>
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-4 mb-6">
                             <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">
                                 {property.agent?.name?.charAt(0) || 'A'}
                             </div>
@@ -114,6 +114,42 @@ const PropertyDetails = () => {
                                 <p className="text-gray-500">{property.agent?.email || 'Nema emaila'}</p>
                             </div>
                         </div>
+
+                        {JSON.parse(localStorage.getItem('user') || '{}').role === 'klijent' && (
+                            <form onSubmit={async (e) => {
+                                e.preventDefault();
+                                const message = e.target.message.value;
+                                if (!message) return;
+                                try {
+                                    const { createInteraction } = await import('../services/api');
+                                    await createInteraction({
+                                        type: 'upit',
+                                        notes: message,
+                                        propertyId: property.id,
+                                        agentId: property.userId // Agenta koji drži oglas
+                                    });
+                                    alert('Upit je uspešno poslat!');
+                                    e.target.reset();
+                                } catch (err) {
+                                    alert('Greška pri slanju upita.');
+                                }
+                            }}>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Pošalji poruku agentu</label>
+                                <textarea
+                                    name="message"
+                                    required
+                                    rows="3"
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none mb-3"
+                                    placeholder="Zanimam se za ovu nekretninu..."
+                                ></textarea>
+                                <button
+                                    type="submit"
+                                    className="w-full bg-blue-600 text-white py-2 rounded-lg font-bold hover:bg-blue-700 transition-colors"
+                                >
+                                    Pošalji upit
+                                </button>
+                            </form>
+                        )}
                     </div>
                 </div>
             </div>
