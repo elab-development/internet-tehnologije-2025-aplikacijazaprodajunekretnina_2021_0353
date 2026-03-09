@@ -79,16 +79,6 @@ const Dashboard = () => {
                     )}
                 </div>
             </div>
-
-            <div className="mt-8 bg-white p-6 rounded-lg shadow-md border-t-2 border-blue-600">
-                <h2 className="text-xl font-semibold mb-4 text-blue-800">Status Projekta</h2>
-                <div className="text-gray-700 text-sm">
-                    <p>✅ Backend rute zaštićene JWT tokenom</p>
-                    <p>✅ Korišćenje 2 eksterna API-ja (Valute & Slike)</p>
-                    <p>✅ Dinamička statistika iz baze podataka</p>
-                    <p>✅ Implementirana CI/CD automatizacija</p>
-                </div>
-            </div>
         </div>
     );
 };

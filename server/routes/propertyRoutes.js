@@ -12,13 +12,12 @@ const {
 const { authenticateToken, authorizeRoles } = require('../middlewares/authMiddleware');
 
 router.use(authenticateToken);
-// Admin vidi sve, agent vidi svoje (logika je u kontroleru)
-// router.use(authorizeRoles('admin', 'agent'));
 
-router.get('/', getAllProperties);
-router.get('/:id', getPropertyById);
-router.post('/', createProperty);
-router.put('/:id', updateProperty);
-router.delete('/:id', deleteProperty);
+router.get('/', getAllProperties); // Svi ulogovani mogu da vide
+router.get('/:id', getPropertyById); // Svi ulogovani mogu da vide detalje
+
+router.post('/', authorizeRoles('admin', 'agent'), createProperty);
+router.put('/:id', authorizeRoles('admin', 'agent'), updateProperty);
+router.delete('/:id', authorizeRoles('admin', 'agent'), deleteProperty);
 
 module.exports = router;

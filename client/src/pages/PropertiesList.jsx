@@ -58,9 +58,22 @@ const PropertiesList = () => {
         fetchProperties();
     }, []);
 
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const canManage = user.role === 'admin' || user.role === 'agent';
+
     return (
         <div className="p-8">
-            <h1 className="text-3xl font-bold mb-6 text-gray-800">Lista Nekretnina</h1>
+            <div className="flex justify-between items-center mb-6">
+                <h1 className="text-3xl font-bold text-gray-800">Lista Nekretnina</h1>
+                {canManage && (
+                    <button
+                        onClick={() => window.location.href = '/properties/add'}
+                        className="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg font-bold shadow-md transition-all active:scale-95 flex items-center gap-2"
+                    >
+                        <span className="text-xl">+</span> Dodaj Nekretninu
+                    </button>
+                )}
+            </div>
             {error && <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4" role="alert"><p>{error}</p></div>}
             {loading ? (
                 <div className="text-center py-10">Učitavanje...</div>

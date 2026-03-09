@@ -1,4 +1,5 @@
 require('dotenv').config();
+require('pg'); // Eksplicitno učitavanje za Vercel/Sequelize
 const PORT = process.env.PORT || 5000;
 const express = require('express');
 const cors = require('cors');
@@ -22,6 +23,11 @@ app.use('/api/properties', propertyRoutes);
 app.use('/api/clients', clientRoutes);
 app.use('/api/external', externalApiRoutes);
 app.use('/api/stats', statsRoutes);
+
+// Root ruta
+app.get('/', (req, res) => {
+  res.send('CRM Real Estate API is running...');
+});
 
 // Health Check rutua
 app.get('/api/health', (req, res) => {

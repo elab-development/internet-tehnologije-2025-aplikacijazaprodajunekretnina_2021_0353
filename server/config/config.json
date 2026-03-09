@@ -14,10 +14,13 @@
     "dialect": "postgres"
   },
   "production": {
-    "username": "crm_user",
-    "password": "crm_password",
-    "database": "real_estate_crm_prod",
-    "host": "127.0.0.1",
-    "dialect": "postgres"
+    "use_env_variable": "DATABASE_URL",
+    "dialect": "postgres",
+    "dialectOptions": {
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": false
+      }
+    }
   }
 }
